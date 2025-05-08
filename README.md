@@ -1,127 +1,446 @@
-# Blog Post-1:<br/>
-## TypeScript-এ interface এবং type এর মধ্যে কী কী পার্থক্য রয়েছে? <br/>
-TypeScript ব্যবহারের অন্যতম বড় সুবিধা হচ্ছে টাইপ সিস্টেম। আর এই টাইপ সিস্টেমের দুটো গুরুত্বপূর্ণ অংশ হলো interface এবং type। অনেকেই সমস্যায় পড়ে যান—কখন interface ব্যবহার করব, আর কখন type? এই ব্লগ পোস্টে আমরা সহজ ও বিস্তারিতভাবে জানতে পারব ইনশা-আল্লাহ: <br/>
-ছোট করে জেনে নেই আমরা কি বিষয়ে জানতে পারব? <br/>
- interface ও type কি? <br/>
+# টাইপস্ক্রিপ্টে ইন্টারফেস বনাম টাইপ: পার্থক্য ও ব্যবহারের ক্ষেত্র
 
- এদের মধ্যে পার্থক্য কী? <br/>
+## ভূমিকা
 
- কখন কোনটা ব্যবহার করা ভালো? <br/>
+টাইপস্ক্রিপ্ট একটি স্ট্যাটিক টাইপ সিস্টেম প্রদান করে যা কোডের নির্ভুলতা উন্নত করে এবং ত্রুটিগুলি আগে থেকেই শনাক্ত করতে সাহায্য করে। টাইপস্ক্রিপ্টে টাইপ ব্যবস্থাপনার দুটি মূল উপায় হল `interface` এবং `type`। এই দুটি উপাদান অনেকটা একই রকম মনে হলেও বেশ কিছু গুরুত্বপূর্ণ পার্থক্য রয়েছে। আজকের এই ব্লগ পোস্টে আমরা এই পার্থক্যগুলি বিস্তারিতভাবে আলোচনা করব এবং কখন কোনটি ব্যবহার করা উচিত তার দিকনির্দেশনা দেব।
 
- উদাহরণসহ দেখতে পারব। <br/>
-<br/>
+## ইন্টারফেস এবং টাইপ কী?
 
-## interface এবং type কী? <br/>
+### ইন্টারফেস কী?
 
-interface:<br/>
-interface মূলত একটি অবজেক্টের স্ট্রাকচার বা গঠন বর্ণনা করতে ব্যবহৃত হয়। এটা একধরনের চুক্তি (contract)—যেখানে আপনি বলবেন, এই অবজেক্টে এই এই প্রপার্টিগুলো থাকবে।<br/>
-<br/>
+ইন্টারফেস হল টাইপস্ক্রিপ্টে অবজেক্টের আকার বা স্ট্রাকচার সংজ্ঞায়িত করার একটি উপায়। এটি একটি নির্দিষ্ট ধরনের "চুক্তি" তৈরি করে যেখানে একটি ক্লাস বা অবজেক্ট অবশ্যই এই চুক্তিতে উল্লিখিত সমস্ত প্রোপার্টি এবং মেথড বাস্তবায়ন করবে।
+
+```typescript
 interface User {
+  id: number;
   name: string;
-  age: number;
-}
-<br/>
-type: <br/>
-type অনেক বেশি ফ্লেক্সিবল। আপনি শুধু অবজেক্ট নয়, ইউনিয়ন টাইপ, টুপল, ফাংশন সিগনেচার, প্রিমিটিভ টাইপ ইত্যাদিও নির্ধারণ করতে পারবেন। <br/>
-<br/>
-type User = {
-  name: string;
-  age: number;
-}
-<br/>
-type ID = string | number;<br/>
-
-## interface বনাম type: মূল পার্থক্য-<br/>
-Extending/Inheritance          :interface সহজভাবে extends দিয়ে বর্ধিত করা যায়, যেমন: interface Admin extends User {}। অন্যদিকে type-এ এক্সটেনশন করতে হলে & (intersection) অপারেটর ব্যবহার করতে হয়, যেমন: type Admin = User & { role: string }। <br/>
-Declaration Merging            :interface একই নামে একাধিকবার ঘোষণা করলে তারা একত্রিত (merge) হয়ে যায়। এটা API বা লাইব্রেরি এক্সটেনশনের জন্য বেশ উপযোগী। অন্যদিকে type-এ একই নামের একাধিক ডিক্লারেশন করা যায় না; করলে টাইপ এরর হয়। <br/>
-Use Cases                      :interface সাধারণত অবজেক্ট ও ক্লাসের স্ট্রাকচার বর্ণনার জন্য উপযুক্ত। পক্ষান্তরে type অনেক বেশি ফ্লেক্সিবল—এটা ফাংশন টাইপ, টুপল, ইউনিয়ন, ইন্টারসেকশন ইত্যাদি নানা ধরনের টাইপ সংজ্ঞায়িত করতে পারে। <br/>
-Performance (compilation time) :কম্পাইল টাইমে interface তুলনামূলকভাবে একটু দ্রুত কাজ করে। যদিও এই পার্থক্য সাধারণত খুব সামান্য, বড় প্রজেক্টে এটি প্রভাব ফেলতে পারে। অন্যদিকে type কিছুটা ধীর হতে পারে, বিশেষ করে যখন অনেক বেশি জটিল টাইপ সংমিশ্রণ থাকে। <br/>
-<br/>
-<br/>
-
-### কখন interface ব্যবহার করবেন? <br/>
-যখন আপনি একটি অবজেক্ট বা ক্লাসের স্ট্রাকচার বর্ণনা করছেন। <br/>
-
-যখন ভবিষ্যতে টাইপটি একাধিক জায়গায় বাড়ানো লাগতে পারে।<br/>
-
-যখন আপনি চাইছেন টাইপ মার্জিং বা ডিক্লারেশন মার্জিং হোক।<br/>
-
-উদাহরণ: <br/>
-interface Person {
-  name: string;
-  age: number;
-}
-<br/>
-interface Person {
   email: string;
+  isActive?: boolean; // ঐচ্ছিক প্রোপার্টি
+  greet(): string;
 }
-<br/>
-const p: Person = {
-  name: "Shawon",
-  age: 25,
-  email: "shawon@example.com"
-};
-<br/>
-### কখন type ব্যবহার করবেন?<br/>
-যখন আপনাকে ইউনিয়ন টাইপ, টুপল, অথবা ফাংশন টাইপ ডিফাইন করতে হবে।<br/>
+```
 
-যখন টাইপে প্রিমিটিভ বা কাস্টম টাইপ একত্রে ব্যবহারের দরকার হয়।<br/>
+### টাইপ এলিয়াস কী?
 
-যখন জটিল টাইপ কম্বিনেশন দরকার হয়।<br/>
+টাইপ এলিয়াস (বা সাধারণত শুধু "টাইপ") হল টাইপস্ক্রিপ্টে একটি বিদ্যমান টাইপ বা টাইপের সমন্বয়ে একটি নতুন নাম দেওয়ার জন্য ব্যবহৃত হয়। এটি শুধু অবজেক্টই নয়, যেকোনো টাইপের জন্য ব্যবহার করা যায়।
 
-উদাহরণ: <br/>
-<br/>
-type ID = number | string;
-<br/>
+```typescript
 type User = {
-  id: ID;
+  id: number;
+  name: string;
+  email: string;
+  isActive?: boolean; // ঐচ্ছিক প্রোপার্টি
+  greet(): string;
+};
+```
+
+## কেন ইন্টারফেস এবং টাইপের মধ্যে পার্থক্য জানা গুরুত্বপূর্ণ?
+
+টাইপস্ক্রিপ্ট প্রোগ্রামিং এর দক্ষতা বাড়াতে এবং সঠিক সিদ্ধান্ত নিতে এই দুটির মধ্যে পার্থক্য জানা অত্যন্ত গুরুত্বপূর্ণ। কারণ:
+
+1. **কোড পঠনযোগ্যতা ও রক্ষণাবেক্ষণ** - সঠিক টুল ব্যবহার করে কোড পঠনযোগ্যতা বাড়ানো যায়
+2. **পারফরম্যান্স অপ্টিমাইজেশন** - কিছু ক্ষেত্রে একটি অন্যটির চেয়ে বেশি কার্যকর হতে পারে
+3. **বড় দলের সাথে সহযোগিতা** - টিমের জন্য একটি সামঞ্জস্যপূর্ণ প্যাটার্ন তৈরি করা
+4. **ডিজাইন প্যাটার্ন** - বিভিন্ন ডিজাইন প্যাটার্নে বিভিন্ন টুল বেশি উপযোগী হতে পারে
+
+## ইন্টারফেস এবং টাইপের মধ্যে মূল পার্থক্য
+
+### ১. এক্সটেনশন/ইনহেরিটেন্স প্যাটার্ন
+
+**ইন্টারফেস** `extends` কীওয়ার্ড ব্যবহার করে:
+
+```typescript
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+}
+
+// একাধিক ইন্টারফেস এক্সটেন্ড করা যায়
+interface Pet extends Animal, DomesticAnimal {
+  owner: string;
+}
+```
+
+**টাইপ** ইন্টারসেকশন অপারেটর (`&`) ব্যবহার করে:
+
+```typescript
+type Animal = {
   name: string;
 };
-<br/>
-type Admin = User & {
-  role: "admin";
+
+type Dog = Animal & {
+  breed: string;
 };
-<br/>
-## বাস্তব উদাহরণ: <br/>
-### interface দিয়ে অবজেক্ট স্ট্রাকচার: <br/>
-<br/>
-interface Car {
-  brand: string;
-  speed: number;
-  drive(): void;
+
+// একাধিক টাইপের সাথে ইন্টারসেকশন করা যায়
+type Pet = Animal & DomesticAnimal & {
+  owner: string;
+};
+```
+
+### ২. ডিক্লেয়ার মার্জিং
+
+**ইন্টারফেস** একাধিকবার ঘোষণা করা যায় এবং টাইপস্ক্রিপ্ট স্বয়ংক্রিয়ভাবে সেগুলিকে একত্রিত করবে:
+
+```typescript
+interface Window {
+  title: string;
 }
-<br/>
-const myCar: Car = {
-  brand: "Toyota",
-  speed: 120,
-  drive() {
-    console.log("Driving fast!");
-  }
+
+interface Window {
+  ts: TypeScriptAPI;
+}
+
+// উপরের দুটি একত্রিত হয়ে বাস্তবে নিচের মতো হবে:
+// interface Window {
+//   title: string;
+//   ts: TypeScriptAPI;
+// }
+```
+
+**টাইপে** এই ডিক্লেয়ার মার্জিং সম্ভব নয়:
+
+```typescript
+type Window = {
+  title: string;
 };
-<br/>
 
-###  type দিয়ে ফাংশন ও ইউনিয়ন টাইপ:<br/>
+// এরর! Duplicate identifier 'Window'
+type Window = {
+  ts: TypeScriptAPI;
+};
+```
 
-type Add = (a: number, b: number) => number;
+### ৩. প্রিমিটিভ টাইপ এবং ইউনিয়ন টাইপ
 
-const sum: Add = (a, b) => a + b;
+**টাইপ** সরাসরি প্রিমিটিভ, ইউনিয়ন এবং টাপল টাইপ ঘোষণা করতে পারে:
 
-type Shape = "circle" | "square" | "triangle";
+```typescript
+// প্রিমিটিভ টাইপ এলিয়াস
+type Name = string;
 
-## মনে রাখার টিপস: <br/>
+// ইউনিয়ন টাইপ
+type Status = "pending" | "approved" | "rejected";
 
-যদি আপনি শুধু অবজেক্ট টাইপ ব্যবহার করছেন—interface বেছে নিন। <br/>
+// টাপল টাইপ
+type Point = [number, number];
+```
 
-যদি টাইপের ফর্ম অনেক বেশি জটিল হয়—type বেছে নিন। <br/>
+**ইন্টারফেস** শুধুমাত্র অবজেক্ট স্ট্রাকচার ঘোষণা করতে পারে:
 
-যদি চান ফিউচারে টাইপটা সহজে এক্সটেন্ড করতে—interface ভালো পছন্দ। <br/>
+```typescript
+// ইন্টারফেস দিয়ে প্রিমিটিভ টাইপ ডিফাইন করা যায় না
+// interface Name extends string {} // এটি কাজ করবে না
 
-যদি ফাংশন টাইপ বা ইউনিয়ন টাইপ দরকার হয়—type ভালো কাজ করবে।<br/>
-<br/>
-## উপসংহার: <br/>
-interface আর type দুটোই TypeScript-এ টাইপ ডিফাইন করার শক্তিশালী উপায়। আপনি কোনটা ব্যবহার করবেন সেটা নির্ভর করে আপনার প্রয়োজন এবং কনটেক্সটের উপর।
-সর্বোত্তম অভ্যাস হচ্ছে—যেখানে সম্ভব interface ব্যবহার করুন, এবং যেখানে interface সীমাবদ্ধ, সেখানেই type ব্যবহার করুন।<br/>
-<br/>
+// ইউনিয়ন টাইপও ইন্টারফেস দিয়ে করা যায় না
+// interface Status = "pending" | "approved" | "rejected"; // সিনট্যাক্স এরর
+```
+
+### ৪. ইনডেক্সড সিগনেচার
+
+উভয়ই ইনডেক্সড সিগনেচার সাপোর্ট করে, তবে সিনট্যাক্স ভিন্ন:
+
+**ইন্টারফেস**:
+
+```typescript
+interface StringArray {
+  [index: number]: string;
+}
+
+interface Dictionary {
+  [key: string]: any;
+  length: number; // এটি ঠিক আছে কারণ সব সময় 'any'-এর অন্তর্গত
+  name: string;   // এটিও ঠিক আছে
+}
+```
+
+**টাইপ**:
+
+```typescript
+type StringArray = {
+  [index: number]: string;
+};
+
+type Dictionary = {
+  [key: string]: any;
+  length: number;
+  name: string;
+};
+```
+
+### ৫. জেনারিক্স সাপোর্ট
+
+উভয়ই জেনারিক্স সাপোর্ট করে:
+
+**ইন্টারফেস**:
+
+```typescript
+interface Box<T> {
+  value: T;
+}
+
+const stringBox: Box<string> = { value: "হ্যালো" };
+```
+
+**টাইপ**:
+
+```typescript
+type Box<T> = {
+  value: T;
+};
+
+const numberBox: Box<number> = { value: 42 };
+```
+
+### ৬. ইমপ্লিমেন্টেশন
+
+**ইন্টারফেস** সাধারণত ক্লাস ইমপ্লিমেন্টেশনের জন্য ব্যবহৃত হয়:
+
+```typescript
+interface Printable {
+  print(): void;
+}
+
+class Document implements Printable {
+  print() {
+    console.log("প্রিন্টিং ডকুমেন্ট...");
+  }
+}
+```
+
+**টাইপ** দিয়েও ক্লাস ইমপ্লিমেন্ট করা যায়:
+
+```typescript
+type Printable = {
+  print(): void;
+};
+
+class Document implements Printable {
+  print() {
+    console.log("প্রিন্টিং ডকুমেন্ট...");
+  }
+}
+```
+
+### ৭. মেপ্ড টাইপ
+
+**টাইপ** মেপ্ড টাইপ সাপোর্ট করে:
+
+```typescript
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+type ReadonlyPerson = Readonly<Person>;
+// এখন ReadonlyPerson এর সব প্রোপার্টি রিড-অনলি
+```
+
+**ইন্টারফেস** সরাসরি মেপ্ড টাইপ সাপোর্ট করে না:
+
+```typescript
+// এটি কাজ করবে না
+// interface ReadonlyPerson {
+//   readonly [P in keyof Person]: Person[P];
+// }
+```
+
+## কখন কোনটি ব্যবহার করবেন?
+
+### ইন্টারফেস ব্যবহার করুন যখন:
+
+1. **আপনি ওওপি ডিজাইন প্যাটার্ন অনুসরণ করছেন** - ইন্টারফেস ওওপি-র সাথে বেশি সামঞ্জস্যপূর্ণ
+2. **আপনার সাধারণ জাভাস্ক্রিপ্ট লাইব্রেরির ডিফিনিশন প্রয়োজন** - ইন্টারফেস ডিক্লেয়ার মার্জিং-এর মাধ্যমে বাড়ানো যায়
+3. **আপনি API সার্ভিস বা পাবলিক API ডিজাইন করছেন** - অন্য ডেভেলপাররা সহজেই এক্সটেন্ড করতে পারে
+4. **আপনি অবজেক্ট-ওরিয়েন্টেড কোড লিখছেন** - ক্লাস ইমপ্লিমেন্টেশন সহজ হয়
+
+### টাইপ ব্যবহার করুন যখন:
+
+1. **প্রিমিটিভ টাইপ, ইউনিয়ন টাইপ বা টাপল ডেফিনিশন প্রয়োজন** - টাইপ এই ক্ষেত্রে বেশি উপযুক্ত
+2. **মেপ্ড টাইপ, কন্ডিশনাল টাইপ বা অন্যান্য উন্নত টাইপ ফিচার প্রয়োজন** - টাইপ উন্নত টাইপ ম্যানিপুলেশন সাপোর্ট করে
+3. **আপনি ফাংশনাল প্রোগ্রামিং স্টাইল অনুসরণ করছেন** - টাইপ ফাংশনাল প্যাটার্নের সাথে বেশি সামঞ্জস্যপূর্ণ
+4. **আপনার অবজেক্ট স্ট্রাকচার একবার সংজ্ঞায়িত হবে, পরে এক্সটেন্ড হবে না** - টাইপ বেশি নিরাপদ
+
+## উভয়ের ব্যবহারের উদাহরণ
+
+### ইন্টারফেস দিয়ে এপিআই রেসপন্স টাইপিং
+
+```typescript
+// একটি REST API রেসপন্স ডিফাইন করা
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+  timestamp: string;
+}
+
+// বেস ইন্টারফেস
+interface BaseEntity {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// এক্সটেন্ডেড ইন্টারফেস
+interface User extends BaseEntity {
+  username: string;
+  email: string;
+  role: "admin" | "user" | "guest";
+}
+
+// উপরের ইন্টারফেসগুলি ব্যবহার করে
+function processUserResponse(response: ApiResponse<User>) {
+  console.log(`ইউজার ${response.data.username} এর ডাটা প্রসেস করা হচ্ছে`);
+  
+  if (response.data.role === "admin") {
+    console.log("এডমিন অ্যাকসেস দেওয়া হচ্ছে");
+  }
+  
+  return response.data;
+}
+```
+
+### টাইপ দিয়ে জটিল টাইপ ম্যানিপুলেশন
+
+```typescript
+// বেসিক টাইপ ডেফিনিশন
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  address?: {
+    street: string;
+    city: string;
+    country: string;
+  };
+};
+
+// মেপ্ড টাইপ দিয়ে পার্শিয়াল টাইপ তৈরি
+type PartialUser = Partial<User>;
+
+// মেপ্ড টাইপ দিয়ে রিড-অনলি টাইপ তৈরি
+type ReadonlyUser = Readonly<User>;
+
+// ইউজার থেকে শুধু কিছু প্রোপার্টি নেওয়া
+type UserCredentials = Pick<User, "email" | "id">;
+
+// প্রোপার্টি বাদ দেওয়া
+type PublicUserInfo = Omit<User, "email" | "id">;
+
+// কন্ডিশনাল টাইপ
+type UserWithRequiredAddress = User & {
+  address: NonNullable<User["address"]>;
+};
+
+// একটি ইউনিয়ন টাইপ
+type UserRole = "admin" | "editor" | "viewer";
+
+// ফাংশন টাইপ
+type UserFormatter = (user: User) => string;
+
+const formatUser: UserFormatter = (user) => {
+  return `${user.name} (${user.email})`;
+};
+```
+
+## বাস্তব প্রজেক্টে ইন্টারফেস ও টাইপের মিশ্রিত ব্যবহার
+
+বাস্তব প্রজেক্টে অনেক সময় উভয়কেই একসাথে ব্যবহার করা হয়। নিচে একটি রিয়েল-ওয়ার্ল্ড উদাহরণ দেওয়া হল:
+
+```typescript
+// ডোমেইন মডেল হিসেবে ইন্টারফেস ব্যবহার
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  category: ProductCategory;
+  inStock: boolean;
+}
+
+// enum টাইপ ব্যবহার
+enum ProductCategory {
+  Electronics = "electronics",
+  Clothing = "clothing",
+  Books = "books",
+  Food = "food",
+}
+
+// ইউটিলিটি টাইপ ব্যবহার
+type ProductCreationParams = Omit<Product, "id">;
+type ProductUpdateParams = Partial<ProductCreationParams>;
+type ProductListItem = Pick<Product, "id" | "name" | "price" | "inStock">;
+
+// API রেসপন্স টাইপ
+interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+// সার্ভিস ক্লাস
+class ProductService {
+  // ইন্টারফেস ব্যবহার
+  async getProducts(): Promise<PaginatedResponse<ProductListItem>> {
+    // API কল কোড
+    return {} as PaginatedResponse<ProductListItem>;
+  }
+  
+  // টাইপ ব্যবহার
+  async createProduct(params: ProductCreationParams): Promise<Product> {
+    // API কল কোড
+    return {} as Product;
+  }
+  
+  async updateProduct(id: number, params: ProductUpdateParams): Promise<Product> {
+    // API কল কোড
+    return {} as Product;
+  }
+}
+
+// কম্পোনেন্ট প্রপস (রিয়েক্ট/অ্যাঙ্গুলার ইত্যাদি)
+type ProductCardProps = {
+  product: ProductListItem;
+  onAddToCart: (productId: number) => void;
+  isPromoted?: boolean;
+};
+```
+
+## সতর্কতা ও বিবেচনা
+
+### পারফরম্যান্স বিবেচনা
+
+টাইপস্ক্রিপ্টে ইন্টারফেস এবং টাইপ উভয়ই কম্পাইল টাইমে কাজ করে এবং কম্পাইল হওয়া জাভাস্ক্রিপ্ট কোডে কোন পার্থক্য তৈরি করে না। তাই রানটাইম পারফরম্যান্সে কোন পার্থক্য হয় না।
+
+### টিম কনভেনশন
+
+টিমের মধ্যে সামঞ্জস্যপূর্ণতা রাখতে নির্দিষ্ট কনভেনশন অনুসরণ করা উচিত:
+
+- ডোমেইন মডেল এবং API ইন্টারফেসগুলির জন্য সাধারণত `interface` ব্যবহার করুন
+- প্রপস টাইপ, ইউটিলিটি টাইপ এবং ফাংশন টাইপের জন্য `type` ব্যবহার করুন
+- একটি প্রজেক্টে কোথায় কোনটি ব্যবহার করবেন তা নিয়ে টিমের স্টাইল গাইড ডিফাইন করুন
+
+### এডজ কেসেস
+
+- ইন্টারফেসের ডিক্লেয়ার মার্জিং প্রয়োজন হলে, অবশ্যই `interface` ব্যবহার করুন
+- জটিল টাইপ ম্যানিপুলেশন প্রয়োজন হলে `type` ব্যবহার করুন
+- ট্রিকি ইউনিয়ন বা ইন্টারসেকশন টাইপের জন্য `type` ব্যবহার করুন
+
+## উপসংহার
+
+টাইপস্ক্রিপ্টে `interface` এবং `type` এর মধ্যে পার্থক্য জানা গুরুত্বপূর্ণ, কারণ এটি বিভিন্ন পরিস্থিতিতে সঠিক সিদ্ধান্ত নিতে সাহায্য করে। দুটি বৈশিষ্ট্যই অত্যন্ত শক্তিশালী এবং প্রায়শই তাদের মধ্যে ব্যবহারের ওভারল্যাপ রয়েছে।
+
+সাধারণ গাইডলাইন হিসেবে:
+
+- **ইন্টারফেস** বেশিরভাগ অবজেক্ট টাইপ, API কন্ট্র্যাক্ট এবং ওওপি-ভিত্তিক কোডে ব্যবহার করুন
+- **টাইপ** প্রিমিটিভ টাইপ, ইউনিয়ন, টাপল এবং জটিল টাইপ ম্যানিপুলেশনের জন্য ব্যবহার করুন
+
+উভয় বৈশিষ্ট্যই টাইপস্ক্রিপ্টের টাইপ সিস্টেমে গুরুত্বপূর্ণ অবদান রাখে, এবং একটি ভাল টাইপস্ক্রিপ্ট ডেভেলপার উভয়কেই সঠিকভাবে ব্যবহার করতে জানবেন। প্রয়োজন এবং প্রজেক্টের প্রকৃতি অনুযায়ী সঠিক বিকল্প বেছে নেওয়া গুরুত্বপূর্ণ, তবে একটি সামঞ্জস্যপূর্ণ কোড বেস নিশ্চিত করতে টিমের সাথে একটি নির্দিষ্ট স্টাইল গাইড অনুসরণ করা আরও গুরুত্বপূর্ণ।
 
 # BLOG POST-2:<br/>
 # টাইপস্ক্রিপ্টে ইউনিয়ন এবং ইন্টারসেকশন টাইপ: সম্পূর্ণ গাইড
