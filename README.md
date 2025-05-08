@@ -69,7 +69,7 @@ const p: Person = {
 
 যখন জটিল টাইপ কম্বিনেশন দরকার হয়।<br/>
 
-### উদাহরণ: <br/>
+উদাহরণ: <br/>
 <br/>
 type ID = number | string;
 <br/>
