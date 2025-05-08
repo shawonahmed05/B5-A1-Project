@@ -99,7 +99,7 @@ const myCar: Car = {
   }
 };
 <br/>
-### type দিয়ে ফাংশন ও ইউনিয়ন টাইপ:<br/>
+###  type দিয়ে ফাংশন ও ইউনিয়ন টাইপ:<br/>
 
 type Add = (a: number, b: number) => number;
 
